@@ -5,7 +5,7 @@ import cors from "cors";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import mongoose from "mongoose";
-import { swaggerSpecs } from "./utils/swagger.js";
+import { setupSwagger } from "./utils/swagger.js";
 
 
 import authRoutes from "./routes/auth.js";
@@ -14,7 +14,7 @@ import adminRoutes from "./routes/admin.js";
 import uploadRoutes from "./routes/upload.js";
 import {  errorHandler } from "./middlewares/errorHandler.js";
 // Swagger
-swaggerDocs(app);
+setupSwagger(app);
 
 dotenv.config();
 const app = express();

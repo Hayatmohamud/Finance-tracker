@@ -1,30 +1,29 @@
-import swaggerJsDoc from "swagger-jsdoc";
+// utils/swagger.js
+import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 // Swagger options
-const swaggerOptions = {
-  swaggerDefinition: {
+const options = {
+  definition: {
     openapi: "3.0.0",
     info: {
       title: "Finance Tracker API",
       version: "1.0.0",
-      description:
-        "API documentation for Finance Tracker (Transactions & Auth)",
+      description: "API documentation for Finance Tracker app",
     },
-    servers: [{ url: "http://localhost:5000", description: "Local server" }],
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
-        },
+    servers: [
+      {
+        url: "http://localhost:5000", // Change if your server URL is different
       },
-    },
-    security: [{ bearerAuth: [] }],
+    ],
   },
-  apis: ["./routes/*.js"], // Files containing annotations
+  apis: ["./routes/*.js"], // Path to your route files with JSDoc comments
 };
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+// Create swagger specs
+export const swaggerSpecs = swaggerJsdoc(options);
+
+// Function to setup Swagger in Express app
+export const setupSwagger = (app) => {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+};
