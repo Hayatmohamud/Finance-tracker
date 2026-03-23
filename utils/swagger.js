@@ -10,7 +10,26 @@ const options = {
     },
     servers: [
       {
+        url: "https://finance-tracker-29wp.onrender.com", // URL-kaaga Render
+        description: "Production server",
+      },
+      {
         url: "http://localhost:5000",
+        description: "Local development server",
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
       },
     ],
   },
