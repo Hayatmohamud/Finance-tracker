@@ -166,7 +166,7 @@ router.use(protect);
 
 router.post("/", addTransaction);
 router.get("/", getTransactions);
-router.get("/monthly-summary", getMonthlySummary);
+router.get("/summary/monthly", protect, getMonthlySummary);
 router.put("/:id", updateTransaction);
 router.delete("/:id", deleteTransaction);
 
