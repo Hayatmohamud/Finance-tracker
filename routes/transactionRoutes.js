@@ -166,7 +166,8 @@ router.use(protect);
 
 router.post("/", addTransaction);
 router.get("/", getTransactions);
-router.get("/summary/monthly", protect, getMonthlySummary);
+// routes/transactionRoutes.js dhexdiisa
+router.get("/monthly-summary", protect, getMonthlySummary);
 router.put("/:id", updateTransaction);
 router.delete("/:id", deleteTransaction);
 

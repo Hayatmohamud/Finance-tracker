@@ -3,10 +3,13 @@ import Transaction from "../model/Transaction.js";
 // 1. POST /transactions (Add new income/expense)
 export const addTransaction = async (req, res, next) => {
   try {
+    console.log("REQ.USER:", req.user);
+    console.log("REQ.BODY:", req.body);
+
     const { title, amount, type, category, date } = req.body;
 
     const newTransaction = await Transaction.create({
-      userId: req.user.id, // Waxaa laga helayaa Auth Middleware
+      userId: req.user.id,
       title,
       amount,
       type,
@@ -16,6 +19,7 @@ export const addTransaction = async (req, res, next) => {
 
     res.status(201).json(newTransaction);
   } catch (error) {
+    console.error("ADD TRANSACTION ERROR:", error);
     next(error);
   }
 };
@@ -33,35 +37,26 @@ export const getTransactions = async (req, res, next) => {
 };
 
 // 3. GET /transactions/monthly-summary (Total per category)
-export const getMonthlySummary = async (req, res) => {
+export const getSummary = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { month, year } = req.query; // ex: ?month=3&year=2026
 
-    if (!month || !year) {
-      return res.status(400).json({ message: "Month and year required" });
-    }
+    const transactions = await Transaction.find({ userId });
 
-    // date range
-    const start = new Date(year, month - 1, 1); // month is 0-indexed
-    const end = new Date(year, month, 1); // next month
-
-    const transactions = await Transaction.find({
-      userId,
-      date: { $gte: start, $lt: end },
-    });
-
-    // total income and expense
     const summary = transactions.reduce(
       (acc, t) => {
-        if (t.type === "income") acc.income += t.amount;
-        else if (t.type === "expense") acc.expense += t.amount;
+        if (t.type === "income") acc.income += Number(t.amount);
+        if (t.type === "expense") acc.expense += Number(t.amount);
         return acc;
       },
       { income: 0, expense: 0 },
     );
 
-    res.json(summary);
+    res.json({
+      income: summary.income,
+      expense: summary.expense,
+      balance: summary.income - summary.expense,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
