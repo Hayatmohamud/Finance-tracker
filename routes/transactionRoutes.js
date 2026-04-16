@@ -2,7 +2,7 @@ import express from "express";
 import {
   addTransaction,
   getTransactions,
-  getMonthlySummary,
+  getSummary,
   updateTransaction,
   deleteTransaction,
 } from "../controllers/transactionController.js";
@@ -167,7 +167,7 @@ router.use(protect);
 router.post("/", addTransaction);
 router.get("/", getTransactions);
 // routes/transactionRoutes.js dhexdiisa
-router.get("/monthly-summary", protect, getMonthlySummary);
+router.get("/monthly-summary", protect, getSummary);
 router.put("/:id", updateTransaction);
 router.delete("/:id", deleteTransaction);
 
