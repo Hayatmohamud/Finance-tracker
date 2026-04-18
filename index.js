@@ -21,7 +21,13 @@ const app = express();
 // --- 1. MIDDLEWARES ---
 app.use(express.json());
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://smart-cents-lime.vercel.app", // Allow only your frontend
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use(morgan("dev"));
 
 // Rate Limiting
